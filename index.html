@@ -29,13 +29,13 @@ body.dark {
     --link: #60a5fa;
     --hover: #1e293b;
 }
+
 /* ---------- Base ---------- */
 body {
     font-family: "Segoe UI", Roboto, Arial, sans-serif;
     background: var(--bg-main);
     margin: 0;
     color: var(--text-main);
-    transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* ---------- Header ---------- */
@@ -46,39 +46,22 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
 .header-left {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
 }
 
-header .title {
-    font-size: 20px;
-    font-weight: 600;
-}
-
-header a {
-    color: #e5e7eb;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-header a:hover {
-    text-decoration: underline;
-}
-
-/* ---------- Theme Toggle ---------- */
-.toggle {
-    cursor: pointer;
+.toggle, .add-btn {
     background: none;
     border: 1px solid #374151;
     color: #e5e7eb;
     padding: 6px 12px;
     border-radius: 20px;
     font-size: 13px;
+    cursor: pointer;
 }
 
 /* ---------- Container ---------- */
@@ -88,47 +71,6 @@ header a:hover {
     background: var(--bg-card);
     padding: 28px;
     border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    transition: background 0.3s ease;
-}
-
-/* ---------- Search ---------- */
-.search-wrapper {
-    position: relative;
-    margin-bottom: 30px;
-}
-
-.search {
-    width: 100%;
-    padding: 14px;
-    font-size: 15px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    outline: none;
-    background: transparent;
-    color: var(--text-main);
-}
-
-.search-results {
-    position: absolute;
-    width: 100%;
-    background: var(--bg-card);
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    margin-top: 6px;
-    display: none;
-    max-height: 260px;
-    overflow-y: auto;
-    z-index: 20;
-}
-
-.search-results div {
-    padding: 12px 14px;
-    cursor: pointer;
-}
-
-.search-results div:hover {
-    background: var(--hover);
 }
 
 /* ---------- Sections ---------- */
@@ -141,29 +83,18 @@ details {
 }
 
 summary {
-    cursor: pointer;
     font-size: 16px;
     font-weight: 600;
+    cursor: pointer;
     list-style: none;
 }
 
-summary::-webkit-details-marker {
-    display: none;
-}
-
-summary::before {
-    content: "▸";
-    margin-right: 8px;
-}
-
-details[open] summary::before {
-    content: "▾";
-}
+summary::before { content: "▸ "; }
+details[open] summary::before { content: "▾ "; }
 
 /* ---------- Docs ---------- */
 .doc {
-    margin: 14px 0 8px 22px;
-    font-size: 14px;
+    margin: 12px 0 8px 22px;
 }
 
 .doc a {
@@ -171,23 +102,44 @@ details[open] summary::before {
     text-decoration: none;
 }
 
-.doc a:hover {
-    text-decoration: underline;
-}
 /* ---------- Footer ---------- */
 footer {
     text-align: center;
-    padding: 14px 20px;
+    padding: 14px;
     font-size: 13px;
     color: var(--text-muted);
-    margin: 40px 0 20px;
 }
-/* ---------- Responsive ---------- */
-@media (max-width: 768px) {
-    .container {
-        margin: 20px;
-        padding: 20px;
-    }
+
+/* ---------- Modal ---------- */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    padding: 24px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+}
+
+.modal-content input, .modal-content select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+}
+
+.modal-content button {
+    padding: 8px 14px;
 }
 </style>
 </head>
@@ -196,91 +148,104 @@ footer {
 
 <header>
     <div class="header-left">
-        <div class="title">📘 INDIA USM Wiki</div>
-        <button class="toggle" id="themeToggle">🌙 Dark</button>
+        <strong>📘 INDIA USM Wiki</strong>
+        <button class="add-btn" id="openModal">➕ Add Wiki</button>
+        <button class="toggle" id="themeToggle">🌙</button>
     </div>
-    <a href="http://india-itsm/index.html">⬅ Back to Dashboard</a>
+    <a href="http://india-itsm/index.html" style="color:#e5e7eb;">⬅ Dashboard</a>
 </header>
 
-<div class="container">
-
-    <div class="search-wrapper">
-        <input class="search" id="searchInput" placeholder="🔍 Search documentation..." autocomplete="off">
-        <div id="searchResults" class="search-results"></div>
-    </div>
+<div class="container" id="wikiContainer">
 
     <details>
-        <summary>Signup & Documentations - ServiceDesk Plus Cloud</summary>
-        <div class="doc">📄 <a href="https://help.sdpondemand.com/home" target="_blank">ServiceDesk Plus Cloud – User Guide</a></div>
-        <div class="doc">📄 <a href="https://sdpondemand.manageengine.com/Register.do" target="_blank">ServiceDesk Plus Cloud – Sign up Now (IN)</a></div>
+        <summary>General</summary>
     </details>
 
-    <details>
-        <summary>Downloads & Documentations - ServiceDesk Plus On-Premise</summary>
-        <div class="doc">📄 <a href="https://userguide.servicedeskplus.com/home" target="_blank">ServiceDesk Plus OP – User Guide</a></div>
-        <div class="doc">📄 <a href="https://help.assetexplorer.com/portal/en/kb/assetexplorer/overview" target="_blank">Asset Explorer OP – Access & Usage</a></div>
-    </details>
-
-    <details>
-        <summary>SOPs & Runbooks</summary>
-        <div class="doc">📄 <a href="#">Patch Management SOP</a></div>
-        <div class="doc">📄 <a href="#">Incident Response Runbook</a></div>
-    </details>
 </div>
+
 <footer>
-    Credits -<strong>INDIA - USM TEAM</strong><br>
+    Done for and by <strong>INDIA - USM TEAM</strong><br>
     <small>(formerly INDIA - ITSM Team)</small>
 </footer>
+
+<!-- ---------- Modal ---------- -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h3>➕ Add New Wiki</h3>
+        <select id="sectionSelect"></select>
+        <input id="docTitle" placeholder="Document Title">
+        <input id="docLink" placeholder="Zoho Writer / URL">
+        <button onclick="addDoc()">Add</button>
+        <button onclick="closeModal()">Cancel</button>
+    </div>
+</div>
+
 <script>
-/* ---------- Dynamic Search ---------- */
-const input = document.getElementById("searchInput");
-const resultsBox = document.getElementById("searchResults");
-const documents = [];
-
-document.querySelectorAll("details").forEach(section => {
-    const sectionTitle = section.querySelector("summary").innerText;
-    section.querySelectorAll(".doc a").forEach(link => {
-        documents.push({
-            title: link.innerText,
-            section: sectionTitle,
-            url: link.href
-        });
-    });
-});
-
-input.addEventListener("input", () => {
-    const q = input.value.toLowerCase();
-    resultsBox.innerHTML = "";
-    if (!q) return resultsBox.style.display = "none";
-
-    documents.filter(d =>
-        d.title.toLowerCase().includes(q) ||
-        d.section.toLowerCase().includes(q)
-    ).forEach(d => {
-        const div = document.createElement("div");
-        div.innerHTML = `<strong>${d.title}</strong><br><small>${d.section}</small>`;
-        div.onclick = () => window.open(d.url, "_blank");
-        resultsBox.appendChild(div);
-    });
-
-    resultsBox.style.display = "block";
-});
-
-/* ---------- Dark Mode Toggle ---------- */
-const toggle = document.getElementById("themeToggle");
+/* ---------- Dark Mode ---------- */
 const body = document.body;
+if (localStorage.theme === "dark") body.classList.add("dark");
+document.getElementById("themeToggle").onclick = () => {
+    body.classList.toggle("dark");
+    localStorage.theme = body.classList.contains("dark") ? "dark" : "light";
+};
 
-if (localStorage.theme === "dark") {
-    body.classList.add("dark");
-    toggle.textContent = "☀ Light";
+/* ---------- Modal ---------- */
+const modal = document.getElementById("modal");
+const container = document.getElementById("wikiContainer");
+
+document.getElementById("openModal").onclick = () => {
+    populateSections();
+    modal.style.display = "flex";
+};
+
+function closeModal() {
+    modal.style.display = "none";
 }
 
-toggle.onclick = () => {
-    body.classList.toggle("dark");
-    const isDark = body.classList.contains("dark");
-    toggle.textContent = isDark ? "☀ Light" : "🌙 Dark";
-    localStorage.theme = isDark ? "dark" : "light";
-};
+/* ---------- Populate Sections ---------- */
+function populateSections() {
+    const select = document.getElementById("sectionSelect");
+    select.innerHTML = "";
+    document.querySelectorAll("details summary").forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s.innerText;
+        opt.textContent = s.innerText;
+        select.appendChild(opt);
+    });
+}
+
+/* ---------- Add Document ---------- */
+function addDoc() {
+    const sectionName = sectionSelect.value;
+    const title = docTitle.value.trim();
+    const link = docLink.value.trim();
+
+    if (!title || !link) return alert("Please fill all fields");
+
+    const section = [...document.querySelectorAll("details")]
+        .find(d => d.querySelector("summary").innerText === sectionName);
+
+    const div = document.createElement("div");
+    div.className = "doc";
+    div.innerHTML = `📄 <a href="${link}" target="_blank">${title}</a>`;
+    section.appendChild(div);
+
+    saveData();
+    closeModal();
+    docTitle.value = docLink.value = "";
+}
+
+/* ---------- Persistence ---------- */
+function saveData() {
+    localStorage.setItem("wikiContent", container.innerHTML);
+}
+
+function loadData() {
+    const data = localStorage.getItem("wikiContent");
+    if (data) container.innerHTML = data;
+}
+
+loadData();
 </script>
 
 </body>
